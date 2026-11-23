@@ -1,0 +1,1 @@
+Prueba sintética 4.
