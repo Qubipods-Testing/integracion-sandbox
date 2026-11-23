@@ -1,0 +1,4 @@
+# Qubipods (AI-Native Kit, no editar a mano): lo que el agente escribe aquí no se versiona.
+# report.json lo lee la plataforma (ejecución autónoma) o Studio (handoff) desde el worktree.
+/report.json
+/contracts/
