@@ -1,0 +1,143 @@
+{
+  "format": "qubipods.contract/1",
+  "slug": "saludo-api",
+  "title": "API de saludo",
+  "summary": "Expone GET /saludo?nombre=<texto> para que otros servicios pidan un saludo de texto sin reimplementar la lógica de saludar().",
+  "provider": { "system": "integracion-sandbox" },
+  "parts": [
+    {
+      "id": "api",
+      "type": "http-api",
+      "openapi": {
+        "openapi": "3.1.0",
+        "info": { "title": "API de saludo", "version": "1.0.0" },
+        "paths": {
+          "/saludo": {
+            "get": {
+              "operationId": "getSaludo",
+              "parameters": [
+                {
+                  "name": "nombre",
+                  "in": "query",
+                  "required": false,
+                  "description": "Nombre a saludar. Se recorta con trim(); vacío o solo espacios es un error de validación.",
+                  "schema": { "type": "string" },
+                  "examples": {
+                    "ana": { "value": "Ana" },
+                    "vacio": { "value": "  " },
+                    "demasiado-largo": {
+                      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    }
+                  }
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Saludo generado",
+                  "content": {
+                    "application/json": {
+                      "schema": { "$ref": "#/components/schemas/SaludoResponse" },
+                      "examples": {
+                        "ana": { "value": { "saludo": "Hola, Ana." } }
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Nombre inválido (obligatorio o demasiado largo)",
+                  "content": {
+                    "application/json": {
+                      "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                      "examples": {
+                        "vacio": {
+                          "value": {
+                            "error": {
+                              "code": "NOMBRE_OBLIGATORIO",
+                              "message": "El nombre es obligatorio"
+                            }
+                          }
+                        },
+                        "demasiado-largo": {
+                          "value": {
+                            "error": {
+                              "code": "NOMBRE_DEMASIADO_LARGO",
+                              "message": "El nombre es demasiado largo"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "404": {
+                  "description": "Cualquier ruta distinta de /saludo responde este error",
+                  "content": {
+                    "application/json": {
+                      "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                      "examples": {
+                        "no-encontrada": {
+                          "value": {
+                            "error": {
+                              "code": "RUTA_NO_ENCONTRADA",
+                              "message": "Ruta no encontrada"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "405": {
+                  "description": "Cualquier método distinto de GET sobre /saludo responde este error",
+                  "content": {
+                    "application/json": {
+                      "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                      "examples": {
+                        "metodo-no-permitido": {
+                          "value": {
+                            "error": {
+                              "code": "METODO_NO_PERMITIDO",
+                              "message": "Método no permitido"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "components": {
+          "schemas": {
+            "SaludoResponse": {
+              "type": "object",
+              "properties": {
+                "saludo": { "type": "string", "description": "Texto del saludo, por ejemplo \"Hola, Ana.\"" }
+              },
+              "required": ["saludo"],
+              "additionalProperties": false
+            },
+            "ErrorResponse": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "object",
+                  "properties": {
+                    "code": { "type": "string", "description": "Código en MAYÚSCULAS_CON_GUION_BAJO" },
+                    "message": { "type": "string" }
+                  },
+                  "required": ["code", "message"],
+                  "additionalProperties": false
+                }
+              },
+              "required": ["error"],
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    }
+  ]
+}
