@@ -1,0 +1,183 @@
+{
+  "slug": "saludo-api",
+  "parts": [
+    {
+      "id": "api",
+      "type": "http-api",
+      "casing": "camelCase",
+      "openapi": {
+        "info": {
+          "title": "API de saludo",
+          "version": "1.0.0"
+        },
+        "paths": {
+          "/saludo": {
+            "get": {
+              "responses": {
+                "200": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/SaludoResponse"
+                      },
+                      "examples": {
+                        "ana": {
+                          "value": {
+                            "saludo": "Hola, Ana."
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "description": "Saludo generado"
+                },
+                "400": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      },
+                      "examples": {
+                        "vacio": {
+                          "value": {
+                            "error": {
+                              "code": "NOMBRE_OBLIGATORIO",
+                              "message": "El nombre es obligatorio"
+                            }
+                          }
+                        },
+                        "demasiado-largo": {
+                          "value": {
+                            "error": {
+                              "code": "NOMBRE_DEMASIADO_LARGO",
+                              "message": "El nombre es demasiado largo"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "description": "Nombre inválido (obligatorio o demasiado largo)"
+                },
+                "404": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      },
+                      "examples": {
+                        "no-encontrada": {
+                          "value": {
+                            "error": {
+                              "code": "RUTA_NO_ENCONTRADA",
+                              "message": "Ruta no encontrada"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "description": "Cualquier ruta distinta de /saludo responde este error"
+                },
+                "405": {
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "$ref": "#/components/schemas/ErrorResponse"
+                      },
+                      "examples": {
+                        "metodo-no-permitido": {
+                          "value": {
+                            "error": {
+                              "code": "METODO_NO_PERMITIDO",
+                              "message": "Método no permitido"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "description": "Cualquier método distinto de GET sobre /saludo responde este error"
+                }
+              },
+              "parameters": [
+                {
+                  "in": "query",
+                  "name": "nombre",
+                  "schema": {
+                    "type": "string"
+                  },
+                  "examples": {
+                    "ana": {
+                      "value": "Ana"
+                    },
+                    "vacio": {
+                      "value": "  "
+                    },
+                    "demasiado-largo": {
+                      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                    }
+                  },
+                  "required": false,
+                  "description": "Nombre a saludar. Se recorta con trim(); vacío o solo espacios es un error de validación."
+                }
+              ],
+              "operationId": "getSaludo"
+            }
+          }
+        },
+        "openapi": "3.1.0",
+        "components": {
+          "schemas": {
+            "ErrorResponse": {
+              "type": "object",
+              "required": [
+                "error"
+              ],
+              "properties": {
+                "error": {
+                  "type": "object",
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "description": "Código en MAYÚSCULAS_CON_GUION_BAJO"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            },
+            "SaludoResponse": {
+              "type": "object",
+              "required": [
+                "saludo"
+              ],
+              "properties": {
+                "saludo": {
+                  "type": "string",
+                  "description": "Texto del saludo, por ejemplo \"Hola, Ana.\""
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        }
+      }
+    }
+  ],
+  "title": "API de saludo",
+  "format": "qubipods.contract/1",
+  "summary": "Expone GET /saludo?nombre=<texto> para que otros servicios pidan un saludo de texto sin reimplementar la lógica de saludar().",
+  "version": "1.0.0",
+  "provider": {
+    "system": "integracion-sandbox"
+  }
+}

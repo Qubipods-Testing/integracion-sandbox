@@ -1,7 +1,7 @@
 {
   "version": "skills:generate-spec@2.4,plan-repos@1.1,fix-incident@1.3,implement-change@1.12,archive-change@1.1,verify-change@1.10,publish-release@1.2,resolve-integration@1.2;security:-;sync:-;release:-",
-  "hash": "36f1882c5a75395a7600e2324ba97bed7c7d2b5979adfc1002b05ea13ac8b9ef",
-  "generatedAt": "2026-11-23T20:38:54.750Z",
+  "hash": "d4aaf4c64f8fe856f796ea0445546fa5c12386b148703fa665c55f39d9f3f214",
+  "generatedAt": "2026-11-24T03:40:31.386Z",
   "files": [
     ".claude/skills/archive-change/SKILL.md",
     ".claude/skills/fix-incident/SKILL.md",
@@ -12,6 +12,13 @@
     ".claude/skills/publish-release/SKILL.md",
     ".claude/skills/resolve-integration/SKILL.md",
     ".claude/skills/verify-change/SKILL.md",
+    ".ai-stack/contracts/FORMAT.md",
+    ".ai-stack/contracts/README.md",
+    ".ai-stack/contracts/check.mjs",
+    ".ai-stack/contracts/index.json",
+    ".ai-stack/contracts/mock-server.mjs",
+    ".ai-stack/contracts/saludo-api/contract.json",
+    ".ai-stack/contracts/saludo-api/openapi.json",
     ".agentos/.gitignore"
   ]
 }
