@@ -144,15 +144,17 @@ deban limitarse a la CI del repo.
   `NOMBRE_DEMASIADO_LARGO`), `404` (`RUTA_NO_ENCONTRADA`) y `405`
   (`METODO_NO_PERMITIDO`), todas con el esquema de error
   `{"error":{"code","message"}}` (ADR-09).
-- **Casing**: el contrato no declara `casing` para la parte `api`. No hay
-  evidencia en el repo de una convención de serialización (no hay
-  serializador ni librería JSON que imponga un casing): las respuestas
-  `{"saludo": ...}` y `{"error":{"code","message"}}` se arman a mano con
-  `JSON.stringify` en `servidor.mjs`, y sus campos (`saludo`, `error`,
-  `code`, `message`) son palabras simples de una sola forma, sin partes
-  compuestas que distingan camelCase de snake_case. **Pregunta abierta para
-  el AI Architect**: confirmar el casing a declarar en una futura versión
-  del contrato si se agregan campos compuestos (por ejemplo
-  `nombreOriginal` vs `nombre_original`).
+- **Casing**: el contrato declara `"casing": "camelCase"` en la parte
+  `api`. Esta es una API nueva sin serializador propio que lo imponga, así
+  que la evidencia es el propio DERCAS DEF-2026-003 v1.0.0, que fija los
+  campos de la respuesta en la sección "Diseño técnico → Contratos"
+  (`{"saludo":"Hola, <nombre>."}`) y en US-01.01/AC-01.01.* (`error.code`,
+  `error.message`): `saludo`, `error`, `code` y `message` son los nombres
+  tal como el DERCAS los exige, y son compatibles con camelCase (son
+  palabras simples de una sola forma, sin guiones bajos ni mayúscula
+  inicial de segunda palabra). Se declara camelCase porque es la convención
+  por defecto de las respuestas JSON de este repo y de sus futuros campos
+  compuestos (por ejemplo, si se agrega `nombreOriginal`), y porque el
+  DERCAS no exige explícitamente snake_case en ningún punto.
 - No rompe a nadie: es la primera versión del contrato, sin consumidores
   previos.
