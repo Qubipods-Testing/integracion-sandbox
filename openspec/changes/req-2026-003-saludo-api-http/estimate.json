@@ -1,0 +1,4 @@
+{
+  "traditionalHours": 8,
+  "basis": "Serie A: servidor http manual con enrutamiento, parsing de query y manejo de errores (~3h), pruebas node:test+fetch para 5 casos incluyendo puerto efímero (~2h), main.mjs con arranque y SIGTERM (~1h), redactar y validar el contrato OpenAPI saludo-api con sus ejemplos (~1.5h), revisión final (~0.5h)."
+}
