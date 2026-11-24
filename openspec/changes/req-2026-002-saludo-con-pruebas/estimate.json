@@ -1,0 +1,4 @@
+{
+  "traditionalHours": 3,
+  "basis": "Serie A: 1 función pura (~0.5h), 1 archivo de pruebas con 3 casos node:test (~1h), configurar package.json/script de test (~0.5h), revisión y ajuste final (~1h)."
+}
