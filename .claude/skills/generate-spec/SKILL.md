@@ -60,9 +60,9 @@ no code without an approved proposal.
    consumers. If the instruction carries "Contratos que consume", those are binding: cite them as
    `<slug>@<version>`, never copy or redefine them in the package, and list anything you need
    that they lack as "Faltante" in `## Contratos`.
-   The `casing` of an `http-api` part is how the provider writes field names on the wire today,
+   The `casing` of an `http-api` part is how the provider writes field names on the wire,
    not the naming convention of its source language (ASP.NET Core answers camelCase although C#
-   properties are PascalCase). Infer it from evidence: the provider's serializer configuration
+   properties are PascalCase). For operations that already exist in the provider, infer it from evidence: the provider's serializer configuration
    (`PropertyNamingPolicy`, `AddJsonOptions`/`AddNewtonsoftJson`, a `ContractResolver`, Jackson
    `PropertyNamingStrategy`, field-level name attributes), real responses in its fixtures, snapshots,
    tests or API docs, or the consumer's DTOs when the instruction shows them. Cite the evidence
@@ -70,6 +70,14 @@ no code without an approved proposal.
    part and add an open question for the AI Architect in `## Contratos` and in the pull request
    description ("Casing de <slug>: sin evidencia en el repo"). A missing `casing` is then the only
    `ERROR` you may leave below: it blocks the approval until the architect answers.
+   For operations this request creates, there is no response to observe yet: take the casing from
+   the repository's serializer configuration or the JSON responses it already returns and, when
+   there are none, from the framework's default on the wire. Record it in `## Contratos` as a
+   decision ("Casing de <slug>: <value>, API nueva, <source>"). Never leave it out for a new API.
+   A negative example is a request to that same operation that the provider rejects (an invalid or
+   missing parameter, an invalid body), and every example of an operation asks for something different (`example.ambiguous` otherwise).
+   A route or method the contract does not declare (a 404 for an unknown route, a 405)
+   is not a contract example: if it matters, test it in the provider, outside the contract.
    Every example must satisfy its shape: every `required` field present, no `null` unless the
    type allows it, and a `mustContain` with the same root type as the file (object or list).
    Then validate them:

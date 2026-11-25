@@ -1765,6 +1765,18 @@ function validateExamples(o, ex, resolve, out) {
             byKey.set(r.key, r);
     }
     const keys = [...new Set(ex.all.map((e) => e.key))];
+    const asked = new Map();
+    for (const key of [...keys].sort()) {
+        const response = byKey.get(key);
+        if (!response && !ex.emptySuccess)
+            continue;
+        const request = (0, model_1.canonicalJson)(Object.fromEntries(ex.req.filter((e) => e.key === key).map((e) => [e.where, e.value ?? null])));
+        const first = asked.get(request);
+        if (first === undefined)
+            asked.set(request, key);
+        else
+            out.push((0, model_1.issue)((response ?? ex.req.find((e) => e.key === key)).at, 'example.ambiguous', `Los ejemplos «${first}» y «${key}» piden lo mismo: el consumidor no puede ejercitar los dos. Cada ejemplo de una operación pide algo distinto`));
+    }
     for (const key of keys) {
         const response = byKey.get(key);
         const requests = ex.req.filter((e) => e.key === key);

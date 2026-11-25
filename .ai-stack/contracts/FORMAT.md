@@ -25,9 +25,11 @@ approved one (compatible or breaking) and assigns the version number. Never writ
 
 ## Part `http-api`: OpenAPI 3.1 embedded
 `{ "id", "type": "http-api", "casing": "camelCase" | "snake_case" | "PascalCase", "openapi": <OpenAPI 3.1 document> }`.
-`casing` is how field names are written on the wire; consumers are linted against it. Take it from the provider's
-serializer configuration or real responses (fixtures, tests, API docs), never from the source language's naming convention
-(ASP.NET Core answers camelCase although C# properties are PascalCase). Without evidence, leave it out and ask the AI Architect.
+`casing` is how field names are written on the wire; consumers are linted against it. For operations that already exist,
+take it from the provider's serializer configuration or real responses (fixtures, tests, API docs),
+never from the source language's naming convention (ASP.NET Core answers camelCase although C# properties are PascalCase);
+without evidence, leave it out and ask the AI Architect. For operations the request creates, take it from the repository's serializer configuration and,
+without one, from the framework's default on the wire, and record it as a decision in `## Contratos`.
 
 Supported profile (anything else is accepted but reported, and any change inside it counts as breaking):
 - `"openapi": "3.1.x"`, `info.title`, `info.version` (informative only).
@@ -51,6 +53,9 @@ Supported profile (anything else is accepted but reported, and any change inside
 - Every example satisfies its schema: every `required` field is present at every level (an `id` too), and
   `null` only where the type lists `"null"` (never `null` where the schema expects an object or a list).
   Only the request of a negative example (its response is 4xx) may break it on purpose.
+- A negative example is a request to that same operation that the provider rejects, and every example of an operation
+  asks for something different.
+  A route or method the contract does not declare (a 404 for an unknown route, a 405) is not an example.
 - `"x-qubipods-assert": ["/items/0/style"]` on a response example lists JSON Pointers whose values must be equal in the real response.
 - Synthetic data only: never real client data, secrets or personal data.
 
