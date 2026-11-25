@@ -23,10 +23,23 @@ for (const c of index.contracts ?? []) {
   for (const f of readdirSync(dir).filter((x) => x.endsWith('.json')).sort()) fixtures.push({ slug: c.slug, name: f.slice(0, -5), ...JSON.parse(readFileSync(join(dir, f), 'utf8')) });
 }
 
-/** El fixture de una petición: mismo método y ruta, y cada parámetro de query del fixture con el mismo valor. */
+/**
+ * El fixture de una petición: mismo método y ruta, y cada parámetro de query del fixture con el mismo valor. Gana el
+ * que tiene exactamente la query de la petición; si ninguno, el que más parámetros coincide; en empate, el primero.
+ */
 export function match(list, method, url) {
   const u = new URL(url, 'http://mock');
-  return list.find((f) => f.request.method === method.toUpperCase() && f.request.path === u.pathname && Object.entries(f.request.query ?? {}).every(([k, v]) => u.searchParams.get(k) === String(v))) ?? null;
+  const asked = new Set(u.searchParams.keys());
+  let best = null;
+  let bestScore = -1;
+  for (const f of list) {
+    if (f.request.method !== method.toUpperCase() || f.request.path !== u.pathname) continue;
+    const query = Object.entries(f.request.query ?? {});
+    if (!query.every(([k, v]) => u.searchParams.get(k) === String(v))) continue;
+    const score = query.length === asked.size ? Number.MAX_SAFE_INTEGER : query.length;
+    if (score > bestScore) [best, bestScore] = [f, score];
+  }
+  return best;
 }
 
 const server = createServer((req, res) => {

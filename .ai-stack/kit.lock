@@ -1,7 +1,7 @@
 {
-  "version": "skills:generate-spec@2.4,plan-repos@1.1,fix-incident@1.3,implement-change@1.12,archive-change@1.1,verify-change@1.10,publish-release@1.2,resolve-integration@1.2;security:-;sync:-;release:-",
-  "hash": "d4aaf4c64f8fe856f796ea0445546fa5c12386b148703fa665c55f39d9f3f214",
-  "generatedAt": "2026-11-24T03:40:31.386Z",
+  "version": "skills:generate-spec@2.5,plan-repos@1.1,fix-incident@1.3,implement-change@1.12,archive-change@1.1,verify-change@1.10,publish-release@1.2,resolve-integration@1.2;security:-;sync:-;release:-",
+  "hash": "a5fd872138e54d7db6a2716739fd68195778135438c6cc9a6ee50576096af026",
+  "generatedAt": "2026-11-25T23:01:23.968Z",
   "files": [
     ".claude/skills/archive-change/SKILL.md",
     ".claude/skills/fix-incident/SKILL.md",
